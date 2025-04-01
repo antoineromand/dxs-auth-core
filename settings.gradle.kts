@@ -10,5 +10,5 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
-rootProject.name = "dxs-auth-core"
+rootProject.name = "auth-core"
 include("lib")

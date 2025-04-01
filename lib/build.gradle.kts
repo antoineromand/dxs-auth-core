@@ -20,6 +20,8 @@ dependencies {
     testImplementation(libs.junit.jupiter)
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("org.springframework:spring-core:6.2.3")
+    implementation("io.jsonwebtoken:jjwt-root:0.12.6")
 
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api(libs.commons.math3)
@@ -39,3 +41,6 @@ tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
 }
+
+group="com.dxs.auth.core"
+version="1.0.0"
