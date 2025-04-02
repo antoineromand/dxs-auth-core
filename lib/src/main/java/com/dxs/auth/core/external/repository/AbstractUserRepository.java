@@ -4,7 +4,7 @@ import com.dxs.auth.core.entity.AbstractUser;
 
 import java.util.Optional;
 
-public interface UserRepository<T extends AbstractUser> {
-    Optional<T> findUserByEmail(String email);
+public interface AbstractUserRepository<T extends AbstractUser> {
+    Optional<T> findByEmail(String email);
     T save(T user);
 }
