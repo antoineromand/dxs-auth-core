@@ -18,4 +18,16 @@ public class Response<T> {
         response.error = message;
         return response;
     }
+
+    public T getData() {
+        return data;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public String getError() {
+        return error;
+    }
 }
