@@ -7,8 +7,6 @@ import com.dxs.auth.core.external.TokenManager;
 import com.dxs.auth.core.external.repository.AbstractUserRepository;
 import com.dxs.auth.core.response.Response;
 
-import java.util.Optional;
-
 public class LoginUseCase<T extends AbstractUser> {
     private final AbstractUserRepository<T> userRepository;
     private final IPasswordEncrypt passwordEncrypt;
