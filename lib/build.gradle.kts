@@ -21,8 +21,9 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.16.1")
     testImplementation("org.mockito:mockito-junit-jupiter:5.16.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation("io.jsonwebtoken:jjwt-root:0.12.6")
-
+    implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api(libs.commons.math3)
 
