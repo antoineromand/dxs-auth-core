@@ -1,14 +1,10 @@
 name: Release with release-please
 
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   release:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     permissions:
@@ -16,16 +12,17 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Run release-please
         uses: googleapis/release-please-action@v4
         with:
+          token: ${{ secrets.REPO_PAT }}
           release-type: simple
           package-name: dxs-auth-core
+          target-branch: main
           version-file: gradle.properties
           versioning-strategy: regex
           version-path: gradle.properties
           version-finder: '{"pattern": "version\\s*=\\s*(\\d+\\.\\d+\\.\\d+)"}'
-          target-branch: main
