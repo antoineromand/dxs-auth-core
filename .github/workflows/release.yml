@@ -1,10 +1,14 @@
 name: Release with release-please
 
 on:
-  workflow_dispatch:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
 
 jobs:
   release:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     permissions:
@@ -12,20 +16,12 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Debug version
-        run: |
-          echo "gradle.properties content:"
-          cat gradle.properties
-          echo "Extracted version:"
-          grep "^version" gradle.properties || echo "No version found"
 
       - name: Run release-please
         uses: googleapis/release-please-action@v4
         with:
-          token: ${{ secrets.PAT_GITHUB }}
           release-type: simple
           package-name: dxs-auth-core
           version-file: gradle.properties
