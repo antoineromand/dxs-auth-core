@@ -1,6 +1,6 @@
 {
   "packages": {
-    "lib": {
+    ".": {
       "release-type": "simple",
       "version-file": "gradle.properties"
     }
