@@ -8,6 +8,7 @@
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+    `maven-publish`
 }
 
 repositories {
@@ -43,9 +44,29 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
+publishing {
+    publications {
+        register("mavenJava", MavenPublication::class) {
+            from(components["java"])
+        }
+    }
+
+    repositories {
+        maven {
+            name = "DxsAuthCore"
+            url=uri("https://maven.pkg.github.com/antoineromand/dxs-auth-core")
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 tasks.jar {
     archiveBaseName = "auth-core"
 }
+
 
 group="com.dxs.auth.core"
 version="1.0.0"
