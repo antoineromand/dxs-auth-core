@@ -16,5 +16,3 @@ jobs:
     steps:
       - name: Release Please Action
         uses: google-github-actions/release-please-action@v4
-        with:
-          config-file: .github/release-please-config.json
