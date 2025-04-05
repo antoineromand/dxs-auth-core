@@ -1,8 +1,6 @@
 {
-  "release-type": "simple",
-  "packages": {
-    ".": {
-      "version-file": "lib/build.gradle.kts"
-    }
+  "lib": {
+    "release-type": "simple",
+    "version-file": "lib/build.gradle.kts"
   }
 }
