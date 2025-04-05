@@ -25,4 +25,4 @@ jobs:
       run: ./gradlew publish
       env:
         USERNAME: ${{ secrets.USERNAME }}
-        TOKEN: ${{ secrets.PAT_DXS_PACKAGES }}
+        TOKEN: ${{ secrets.PAT_GITHUB }}
