@@ -27,4 +27,9 @@ jobs:
       - name: Run release-please
         uses: googleapis/release-please-action@v4
         with:
-          config-file: .github/release-please-config.json
+          release-type: simple
+          package-name: dxs-auth-core
+          version-file: gradle.properties
+          versioning-strategy: regex
+          version-path: gradle.properties
+          version-finder: '{"pattern": "version\\s*=\\s*(\\d+\\.\\d+\\.\\d+)"}'
