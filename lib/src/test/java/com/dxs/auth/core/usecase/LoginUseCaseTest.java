@@ -36,7 +36,7 @@ class LoginUseCaseTest {
     void shouldLoginSuccessfully_whenCredentialsAreCorrect() {
         MockUser user = new MockUser(UUID.randomUUID(), "user@example.com", "hashed-password", RoleEnum.REGULAR);
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(passwordEncrypt.match("hashed-password", "plain-password")).thenReturn(true);
+        when(passwordEncrypt.match("plain-password", "hashed-password")).thenReturn(true);
         when(tokenManager.generateToken(user.getId(), user.getRole(), 900)).thenReturn("mocked-jwt");
 
         Response<String> response = loginUseCase.login("user@example.com", "plain-password");
@@ -57,7 +57,7 @@ class LoginUseCaseTest {
     void shouldThrow_whenPasswordDoesNotMatch() {
         MockUser user = new MockUser(UUID.randomUUID(), "user@example.com", "hashed-password", RoleEnum.REGULAR);
         when(userRepository.findByEmail("user@example.com")).thenReturn(Optional.of(user));
-        when(passwordEncrypt.match("hashed-password", "wrong-password")).thenReturn(false);
+        when(passwordEncrypt.match("wrong-password", "hashed-password")).thenReturn(false);
 
         assertThrows(AuthenticationFailedException.class,
                 () -> loginUseCase.login("user@example.com", "wrong-password"));
