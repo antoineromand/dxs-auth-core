@@ -43,5 +43,9 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
+tasks.jar {
+    archiveBaseName = "auth-core"
+}
+
 group="com.dxs.auth.core"
 version="1.0.0"

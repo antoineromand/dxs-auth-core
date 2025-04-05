@@ -19,7 +19,7 @@ public class LoginUseCase<T extends AbstractUser> {
 
     public Response<String> login(String email, String password) {
         T foundUser = userRepository.findByEmail(email)
-                .filter(u -> passwordEncrypt.match(u.getPassword(), password))
+                .filter(u -> passwordEncrypt.match(password, u.getPassword()))
                 .orElseThrow(() -> new AuthenticationFailedException("Invalid Credentials"));
 
         String jwt = tokenManager.generateToken(foundUser.getId(), foundUser.getRole(), 900);
