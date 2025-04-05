@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/antoineromand/dxs-auth-core/compare/v1.0.0...v1.0.1) (2025-04-05)
+
+
+### Bug Fixes
+
+* fix gitignore and add gradle wrapper ([70828cf](https://github.com/antoineromand/dxs-auth-core/commit/70828cf9ce6be66bf3e14ed9a06d81c1bd0b4a28))
+
 ## 1.0.0 (2025-04-05)
 
 
