@@ -22,7 +22,7 @@ jobs:
         java-version: '23'
 
     - name: Publish to GitHub Packages
-      run: ./gradlew publish
+      run: ./gradlew :lib:publish --no-configuration-cache
       env:
         USERNAME: ${{ secrets.USERNAME }}
         TOKEN: ${{ secrets.PAT_GITHUB }}
