@@ -32,3 +32,4 @@ jobs:
           versioning-strategy: regex
           version-path: gradle.properties
           version-finder: '{"pattern": "version\\s*=\\s*(\\d+\\.\\d+\\.\\d+)"}'
+          target-branch: main
