@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.1](https://github.com/antoineromand/dxs-auth-core/compare/v1.0.0...v1.0.1) (2025-04-05)
+
+
+### Bug Fixes
+
+* fix gitignore and add gradle wrapper ([70828cf](https://github.com/antoineromand/dxs-auth-core/commit/70828cf9ce6be66bf3e14ed9a06d81c1bd0b4a28))
+* remove cache from gradle only in ci (compatibilit issue with cache in gradle.properties) and change execution of release action (manual instead of push main). ([85c1771](https://github.com/antoineromand/dxs-auth-core/commit/85c177162d85ab9d876dc2e574a00fa5cc94eca5))
+* target main to force github to create tag when pr is merged. ([67c84b8](https://github.com/antoineromand/dxs-auth-core/commit/67c84b8c1966d5c1b4d726e7fb1c542387de3689))
+
 ## 1.0.0 (2025-04-05)
 
 
