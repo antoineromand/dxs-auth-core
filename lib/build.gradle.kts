@@ -5,6 +5,9 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.13/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+group = "com.dxs.auth.core"
+version = "1.0.0"
+
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -66,7 +69,3 @@ publishing {
 tasks.jar {
     archiveBaseName = "auth-core"
 }
-
-
-group="com.dxs.auth.core"
-version="1.0.0"
