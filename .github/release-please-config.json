@@ -1,11 +1,9 @@
 {
-  ".": {
-    "release-type": "simple",
-    "version-file": "gradle.properties",
-    "versioning-strategy": "regex",
-    "version-path": "gradle.properties",
-    "version-finder": {
-      "pattern": "version\\s*=\\s*(\\d+\\.\\d+\\.\\d+)"
-    }
+  "release-type": "simple",
+  "version-file": "gradle.properties",
+  "versioning-strategy": "regex",
+  "version-path": "gradle.properties",
+  "version-finder": {
+    "pattern": "version\\s*=\\s*(\\d+\\.\\d+\\.\\d+)"
   }
 }

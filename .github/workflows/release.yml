@@ -14,14 +14,15 @@ jobs:
       pull-requests: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Debug version file
+      - name: Debug version
         run: |
           echo "gradle.properties content:"
           cat gradle.properties
-      
+          echo "Extracted version:"
+          grep "^version" gradle.properties || echo "No version found"
 
       - name: Run release-please
         uses: googleapis/release-please-action@v4
