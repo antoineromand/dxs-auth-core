@@ -17,12 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🔍 DEBUG - Show version line
+      - name: Debug version file
         run: |
-          echo "VERSION LINE(S):"
-          grep -n "version" lib/build.gradle.kts || echo "No version found"
-          echo "--- FULL FILE ---"
-          cat lib/build.gradle.kts
+          echo "gradle.properties content:"
+          cat gradle.properties
+      
 
       - name: Run release-please
         uses: googleapis/release-please-action@v4

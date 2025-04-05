@@ -1,9 +1,9 @@
 {
   "lib": {
     "release-type": "simple",
-    "version-file": "lib/build.gradle.kts",
+    "version-file": "gradle.properties",
     "versioning-strategy": "regex",
-    "version-path": "lib/build.gradle.kts",
+    "version-path": "gradle.properties",
     "version-finder": {
       "pattern": "version\\s*=\\s*\"(\\d+\\.\\d+\\.\\d+)\""
     }

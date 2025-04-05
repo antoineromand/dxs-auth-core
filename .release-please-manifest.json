@@ -2,7 +2,7 @@
   "packages": {
     "lib": {
       "release-type": "simple",
-      "version-file": "lib/build.gradle.kts"
+      "version-file": "gradle.properties"
     }
   }
 }
