@@ -1,6 +1,11 @@
 {
   "lib": {
     "release-type": "simple",
-    "version-file": "lib/build.gradle.kts"
+    "version-file": "lib/build.gradle.kts",
+    "versioning-strategy": "regex",
+    "version-path": "lib/build.gradle.kts",
+    "version-finder": {
+      "pattern": "version\\s*=\\s*\"(\\d+\\.\\d+\\.\\d+)\""
+    }
   }
 }
