@@ -48,13 +48,16 @@ publishing {
     publications {
         register("mavenJava", MavenPublication::class) {
             from(components["java"])
+            groupId = "com.dxs.auth.core"
+            artifactId = "auth-core"
+            version = project.version.toString()
         }
     }
 
     repositories {
         maven {
-            name = "DxsAuthCore"
-            url=uri("https://maven.pkg.github.com/antoineromand/dxs-auth-core")
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/antoineromand/dxs-auth-core")
             credentials {
                 username = System.getenv("USERNAME")
                 password = System.getenv("TOKEN")
