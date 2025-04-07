@@ -1,0 +1,61 @@
+name: Create Release PR
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  create-release-pr:
+    if: github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
+
+    concurrency:
+      group: release-pr-${{ github.ref }}
+      cancel-in-progress: true
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: changelog
+        run: |
+          LAST_TAG=$(git tag --sort=-creatordate | sed -n 2p)
+          if [ -z "$LAST_TAG" ]; then
+            LAST_TAG="HEAD~50"
+          fi
+
+          echo "Dernier tag utilisé : $LAST_TAG"
+
+          git log $LAST_TAG..HEAD --pretty=format:"%s" \
+          | awk '
+            /^feat/ { f = f "\n- 🚀 " $0 }
+            /^fix/ { x = x "\n- 🐛 " $0 }
+            /^chore/ { c = c "\n- ⚙️ " $0 }
+            !/^(feat|fix|chore)/ { u = u "\n- 🔸 " $0 }
+            END {
+              print "## 🚀 Features" f "\n\n## 🐛 Fixes" x "\n\n## ⚙️ Chore" c "\n\n## 🔸 Non classé" u
+            }
+          ' > RELEASE_CHANGELOG.md
+
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          cat RELEASE_CHANGELOG.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create PR develop → main
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.PAT_GITHUB }}
+          commit-message: "chore: release ${{ github.ref_name }}"
+          title: "🔖 Release ${{ github.ref_name }}"
+          body: "${{ steps.changelog.outputs.CHANGELOG }}"
+          base: main
+          branch: release/${{ github.ref_name }}
+          delete-branch: true
+          add-paths: |
+            RELEASE_CHANGELOG.md
