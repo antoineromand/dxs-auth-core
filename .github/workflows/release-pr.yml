@@ -16,27 +16,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout develop
         uses: actions/checkout@v4
         with:
+          ref: develop
           fetch-depth: 0
 
-      - name: Fetch & Checkout develop
-        run: |
-          git fetch origin develop
-          git checkout develop
-
-      - name: Generate Changelog
+      - name: Generate changelog
         id: changelog
         run: |
           LAST_TAG=$(git tag --sort=-creatordate | sed -n 2p)
           if [ -z "$LAST_TAG" ]; then
-            echo "⚠️ Aucun tag précédent trouvé, fallback sur HEAD~50"
             LAST_TAG="HEAD~50"
           fi
 
           echo "Dernier tag utilisé : $LAST_TAG"
-          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+
           git log $LAST_TAG..HEAD --pretty=format:"%s" \
           | awk '
             /^feat/ { f = f "\n- 🚀 " $0 }
@@ -46,16 +41,21 @@ jobs:
             END {
               print "## 🚀 Features" f "\n\n## 🐛 Fixes" x "\n\n## ⚙️ Chore" c "\n\n## 🔸 Non classé" u
             }
-          ' >> $GITHUB_OUTPUT
+          ' > RELEASE_CHANGELOG.md
+
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          cat RELEASE_CHANGELOG.md >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create PR develop → main
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_GITHUB }}
           commit-message: "chore: release ${{ github.ref_name }}"
           title: "🔖 Release ${{ github.ref_name }}"
           body: "${{ steps.changelog.outputs.CHANGELOG }}"
           base: main
           branch: release/${{ github.ref_name }}
           delete-branch: true
+          add-paths: |
+            RELEASE_CHANGELOG.md
