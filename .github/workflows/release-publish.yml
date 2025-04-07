@@ -26,10 +26,10 @@ jobs:
           | awk '
             /^feat/ { f = f "\n- 🚀 " $0 }
             /^fix/ { x = x "\n- 🐛 " $0 }
-            /^core/ { c = c "\n- ⚙️ " $0 }
-            !/^(feat|fix|core)/ { u = u "\n- 🔸 " $0 }
+            /^chore/ { c = c "\n- ⚙️ " $0 }
+            !/^(feat|fix|chore)/ { u = u "\n- 🔸 " $0 }
             END {
-              print "## 🚀 Features" f "\n\n## 🐛 Fixes" x "\n\n## ⚙️ Core" c "\n\n## 🔸 Non classé" u
+              print "## 🚀 Features" f "\n\n## 🐛 Fixes" x "\n\n## ⚙️ Chore" c "\n\n## 🔸 Non classé" u
             }
           ' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
