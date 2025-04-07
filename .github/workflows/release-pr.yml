@@ -26,9 +26,6 @@ jobs:
           git fetch origin develop
           git checkout develop
 
-      - name: Set up Git
-        run: git fetch --tags --unshallow
-
       - name: Generate Changelog
         id: changelog
         run: |
