@@ -37,9 +37,10 @@ jobs:
       - name: Create PR develop → main
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_GITHUB }}
           commit-message: "chore: release ${{ github.ref_name }}"
           title: "🔖 Release ${{ github.ref_name }}"
           body: "${{ steps.changelog.outputs.CHANGELOG }}"
           base: main
-          branch: develop
+          branch: release/${{ github.ref_name }}
+          delete-branch: true
