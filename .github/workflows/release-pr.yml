@@ -7,11 +7,24 @@ on:
 
 jobs:
   create-release-pr:
+    if: github.ref_type == 'tag' && startsWith(github.ref, 'refs/tags/v')
+
+    concurrency:
+      group: release-pr-${{ github.ref }}
+      cancel-in-progress: true
+
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch & Checkout develop
+        run: |
+          git fetch origin develop
+          git checkout develop
 
       - name: Set up Git
         run: git fetch --tags --unshallow
@@ -19,17 +32,22 @@ jobs:
       - name: Generate Changelog
         id: changelog
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 HEAD^)
-          echo "Dernier tag détecté : $LAST_TAG"
+          LAST_TAG=$(git tag --sort=-creatordate | sed -n 2p)
+          if [ -z "$LAST_TAG" ]; then
+            echo "⚠️ Aucun tag précédent trouvé, fallback sur HEAD~50"
+            LAST_TAG="HEAD~50"
+          fi
+
+          echo "Dernier tag utilisé : $LAST_TAG"
           echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
           git log $LAST_TAG..HEAD --pretty=format:"%s" \
           | awk '
             /^feat/ { f = f "\n- 🚀 " $0 }
             /^fix/ { x = x "\n- 🐛 " $0 }
-            /^core/ { c = c "\n- ⚙️ " $0 }
-            !/^(feat|fix|core)/ { u = u "\n- 🔸 " $0 }
+            /^chore/ { c = c "\n- ⚙️ " $0 }
+            !/^(feat|fix|chore)/ { u = u "\n- 🔸 " $0 }
             END {
-              print "## 🚀 Features" f "\n\n## 🐛 Fixes" x "\n\n## ⚙️ Core" c "\n\n## 🔸 Non classé" u
+              print "## 🚀 Features" f "\n\n## 🐛 Fixes" x "\n\n## ⚙️ Chore" c "\n\n## 🔸 Non classé" u
             }
           ' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
@@ -37,7 +55,7 @@ jobs:
       - name: Create PR develop → main
         uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.PAT_GITHUB }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: release ${{ github.ref_name }}"
           title: "🔖 Release ${{ github.ref_name }}"
           body: "${{ steps.changelog.outputs.CHANGELOG }}"
