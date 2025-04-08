@@ -22,5 +22,10 @@ jobs:
         with:
           release-type: simple
           extra-files: |
-            VERSION
+            [
+              {
+                "path": "VERSION",
+                "type": "text"
+              }
+            ]
           token: ${{ secrets.PAT_GITHUB }}
