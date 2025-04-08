@@ -1,25 +1,20 @@
-name: Pre-Release
+name: Release Please
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main
 
 permissions:
-  content: write
+  contents: write
   pull-requests: write
 
 jobs:
-  release:
-    name: Release pushed tag
-    runs-on: ubuntu-22.04
+  release-please:
+    runs-on: ubuntu-latest
     steps:
-      - name: Create release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
-        run: |
-          gh release create "$tag" \
-              --repo="$GITHUB_REPOSITORY" \
-              --title="${tag#v}" \
-              --generate-notes
+      - uses: google-github-actions/release-please-action@v4
+        with:
+          release-type: java
+          package-name: auth-core
+          token: ${{ secrets.PAT_GITHUB }}
