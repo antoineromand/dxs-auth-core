@@ -1,19 +1,65 @@
-name: Release Please
+name: Publish GitHub Release from Tag
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*.*.*'
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
-  release-please:
+  release:
+    name: Create release from pushed tag
     runs-on: ubuntu-latest
+
     steps:
-      - uses: googleapis/release-please-action@v4
-        with:
-          release-type: java
-          token: ${{ secrets.PAT_GITHUB }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: git fetch --tags --force
+
+      - name: Generate custom release notes and publish release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          echo "Generating release notes for tag $TAG_NAME"
+
+          PREV_TAG=$(git describe --tags --abbrev=0 "${TAG_NAME}^" 2>/dev/null || echo "")
+
+          if [ -n "$PREV_TAG" ]; then
+            COMMITS=$(git log "$PREV_TAG..$TAG_NAME" --pretty=format:"%s")
+          else
+            COMMITS=$(git log "$TAG_NAME" --pretty=format:"%s")
+          fi
+
+          FEATURES=""
+          FIXES=""
+          CHORES=""
+          UNCATEGORIZED=""
+
+          while IFS= read -r line; do
+            if [[ $line == feat:* ]]; then
+              FEATURES+="- ${line#feat: }\n"
+            elif [[ $line == fix:* ]]; then
+              FIXES+="- ${line#fix: }\n"
+            elif [[ $line == chore:* ]]; then
+              CHORES+="- ${line#chore: }\n"
+            else
+              UNCATEGORIZED+="- $line\n"
+            fi
+          done <<< "$COMMITS"
+
+          NOTES=""
+          [ -n "$FEATURES" ] && NOTES+="### 🚀 Features\n$FEATURES\n"
+          [ -n "$FIXES" ] && NOTES+="### 🐛 Fixes\n$FIXES\n"
+          [ -n "$CHORES" ] && NOTES+="### 🔧 Chores\n$CHORES\n"
+          [ -n "$UNCATEGORIZED" ] && NOTES+="### ❓ Autres commits\n$UNCATEGORIZED\n"
+
+          echo -e "$NOTES" > release-notes.md
+
+          gh release create "$TAG_NAME" \
+            --title="${TAG_NAME#v}" \
+            --notes-file release-notes.md
