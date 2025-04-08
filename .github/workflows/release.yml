@@ -20,12 +20,15 @@ jobs:
       - name: Run release-please
         uses: googleapis/release-please-action@v4
         with:
-          release-type: simple
-          extra-files: |
-            [
-              {
-                "path": "VERSION",
-                "type": "text"
-              }
-            ]
           token: ${{ secrets.PAT_GITHUB }}
+          release-type: simple
+          manifest-config: >
+            {
+              "extraFiles": [
+                {
+                  "path": "VERSION",
+                  "type": "text"
+                }
+              ]
+            }
+      
