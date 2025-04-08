@@ -23,5 +23,4 @@ jobs:
           release-type: simple
           extra-files: |
             VERSION
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB }}
+          token: ${{ secrets.PAT_GITHUB }}
