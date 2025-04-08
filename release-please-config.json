@@ -1,0 +1,9 @@
+{
+  "release-type": "simple",
+  "extra-files": [
+    {
+      "path": "VERSION",
+      "type": "text"
+    }
+  ]
+}
