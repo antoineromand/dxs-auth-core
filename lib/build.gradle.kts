@@ -48,4 +48,4 @@ tasks.jar {
 }
 
 group="com.dxs.auth.core"
-version="1.0.0"
+version = file("../VERSION").readText().trim()
