@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   release:
-    name: Create release from pushed tag
+    name: Create GitHub Release from tag
     runs-on: ubuntu-latest
 
     steps:
@@ -29,11 +29,16 @@ jobs:
 
           PREV_TAG=$(git describe --tags --abbrev=0 "${TAG_NAME}^" 2>/dev/null || echo "")
 
+          echo "Previous tag: $PREV_TAG"
+
           if [ -n "$PREV_TAG" ]; then
-            COMMITS=$(git log "$PREV_TAG..$TAG_NAME" --pretty=format:"%s")
+            COMMITS=$(git log "$PREV_TAG..$TAG_NAME" --no-merges --pretty=format:"%s" --reverse)
           else
-            COMMITS=$(git log "$TAG_NAME" --pretty=format:"%s")
+            COMMITS=$(git log --no-merges --pretty=format:"%s" --reverse)
           fi
+
+          echo "Found commits:"
+          echo "$COMMITS"
 
           FEATURES=""
           FIXES=""
@@ -60,6 +65,7 @@ jobs:
 
           echo -e "$NOTES" > release-notes.md
 
+          echo "Creating GitHub Release for $TAG_NAME..."
           gh release create "$TAG_NAME" \
             --title="${TAG_NAME#v}" \
             --notes-file release-notes.md
