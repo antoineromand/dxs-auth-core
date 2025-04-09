@@ -30,7 +30,9 @@ jobs:
         run: |
           release-please release-pr \
             --token=${{ secrets.PAT_GITHUB }} \
-            --release-type=java \
+            --release-type=simple \
             --repo-url=${{ github.repository }} \
             --target-branch=main \
-            --extra-files=version.txt
+            --version-file=version.txt \
+            --changelog-path=CHANGELOG.md \
+            --snapshot=false
