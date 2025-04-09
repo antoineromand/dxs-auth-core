@@ -4,10 +4,13 @@
  * This generated file contains a sample Java library project to get you started.
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.13/userguide/building_java_projects.html in the Gradle documentation.
  */
+group="com.dxs.auth.core"
+version = file("../version.txt").readText(Charsets.UTF_8).trim()
 
 plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
+    `maven-publish`
 }
 
 repositories {
@@ -38,14 +41,65 @@ java {
     }
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("pub") {
+            from(components["java"])
+            group="com.dxs.auth.core"
+            artifactId = "auth-core"
+            version=project.version.toString()
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/antoineromand/dxs-auth-core")
+            credentials {
+                username = System.getenv("USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+}
+
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+tasks.register("bumpVersion") {
+    description = "Incrémente la version (usage: ./gradlew bumpVersion -Ptype=major|minor|patch)"
+    doLast {
+        val type = project.findProperty("type")?.toString() ?: "minor"
+        val file = file("../version.txt")
+        val versionParts = file.readText().trim().split(".").map { it.toInt() }.toMutableList()
+
+        when (type) {
+            "major" -> {
+                versionParts[0] += 1
+                versionParts[1] = 0
+                versionParts[2] = 0
+            }
+            "minor" -> {
+                versionParts[1] += 1
+                versionParts[2] = 0
+            }
+            "patch" -> {
+                versionParts[2] += 1
+            }
+            else -> {
+                throw GradleException("Type de version inconnu: '$type'. Utilise major, minor ou patch.")
+            }
+        }
+
+        val newVersion = versionParts.joinToString(".")
+        file.writeText(newVersion)
+        println("✅ Version bump: $newVersion")
+    }
 }
 
 tasks.jar {
     archiveBaseName = "auth-core"
 }
 
-group="com.dxs.auth.core"
-version="1.0.0"
