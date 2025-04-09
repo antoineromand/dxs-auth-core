@@ -15,20 +15,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Run release-please
-        uses: googleapis/release-please-action@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          token: ${{ secrets.PAT_GITHUB }}
-          release-type: simple
-          manifest-config: >
-            {
-              "extraFiles": [
-                {
-                  "path": "VERSION",
-                  "type": "text"
-                }
-              ]
-            }
-      
+          node-version: '20'
+
+      - name: Install release-please
+        run: npm install -g release-please
+
+      - name: Run release-please (create release PR)
+        run: |
+          release-please release-pr \
+            --token=${{ secrets.PAT_GITHUB }} \
+            --release-type=java \
+            --repo-url=${{ github.repository }} \
+            --target-branch=main \
+            --extra-files=version.txt
