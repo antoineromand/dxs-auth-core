@@ -57,7 +57,7 @@ publishing {
             url = uri("https://maven.pkg.github.com/antoineromand/dxs-auth-core")
             credentials {
                 username = System.getenv("USERNAME")
-                password = System.getenv("PAT_GITHUB")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
