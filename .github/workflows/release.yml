@@ -15,20 +15,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Run release-please
+      - name: Run release-please (simple project, with VERSION bump)
         uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.PAT_GITHUB }}
           release-type: simple
-          manifest-config: >
-            {
-              "extraFiles": [
-                {
-                  "path": "VERSION",
-                  "type": "text"
-                }
-              ]
-            }
-      
+          path: .
+          extra-files: >
+            [
+              {
+                "path": "VERSION",
+                "type": "text"
+              }
+            ]
