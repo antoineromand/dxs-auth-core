@@ -33,4 +33,7 @@ jobs:
             --release-type=java \
             --repo-url=${{ github.repository }} \
             --target-branch=main \
-            --extra-files=version.txt
+            --extra-files=version.txt \
+            --version-file=version.txt \
+            --snapshot=false
+      
