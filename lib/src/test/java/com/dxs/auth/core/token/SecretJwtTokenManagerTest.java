@@ -62,9 +62,8 @@ public class SecretJwtTokenManagerTest {
         String nullToken = null;
         String invalidToken = "invalidtoken.jwtfzfzef.fzefzefezfezf";
 
-        assertThrows(IllegalArgumentException.class, () -> this.secretJwtTokenManager.isTokenValid(emptyToken));
-        assertThrows(IllegalArgumentException.class, () -> this.secretJwtTokenManager.isTokenValid(nullToken));
-
+        assertFalse(this.secretJwtTokenManager.isTokenValid(emptyToken));
+        assertFalse(this.secretJwtTokenManager.isTokenValid(nullToken));
         assertFalse(this.secretJwtTokenManager.isTokenValid(invalidToken));
 
     }

@@ -37,6 +37,9 @@ public class SecretJwtTokenManager implements ITokenManager {
 
     @Override
     public boolean isTokenValid(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
         try {
             Claims claims = Jwts.parser().verifyWith(this.getSigningKey()).build().parseSignedClaims(token).getPayload();
             return !claims.getExpiration().before(new Date());
