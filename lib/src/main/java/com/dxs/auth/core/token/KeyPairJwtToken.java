@@ -1,26 +1,26 @@
-package com.dxs.auth.core.external;
-
-import com.dxs.auth.core.entity.RoleEnum;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+package com.dxs.auth.core.token;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-public class TokenManager {
-    private PublicKey publicKey;
-    private PrivateKey privateKey;
+import com.dxs.auth.core.entity.RoleEnum;
 
-    public TokenManager(PublicKey publicKey, PrivateKey privateKey) {
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+
+public class KeyPairJwtToken implements ITokenManager {
+    private final PublicKey publicKey;
+    private final PrivateKey privateKey;
+
+    public KeyPairJwtToken(PublicKey publicKey, PrivateKey privateKey) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
     }
 
+    @Override
     public String generateToken(UUID id, RoleEnum role, long expiration) {
         Instant now = Instant.now();
         return Jwts
@@ -33,6 +33,7 @@ public class TokenManager {
                 .compact();
     }
 
+    @Override
     public boolean isTokenValid(String token) {
         try {
             Jwts.parser().verifyWith(this.publicKey).build().parse(token);
