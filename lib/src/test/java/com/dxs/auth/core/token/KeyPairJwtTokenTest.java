@@ -1,4 +1,4 @@
-package com.dxs.auth.core.external;
+package com.dxs.auth.core.token;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.dxs.auth.core.entity.RoleEnum;
-import com.dxs.auth.core.token.KeyPairJwtToken;
 
 class KeyPairJwtTokenTest {
 

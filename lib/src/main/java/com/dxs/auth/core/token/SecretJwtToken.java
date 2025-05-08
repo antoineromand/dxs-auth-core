@@ -1,24 +1,25 @@
 package com.dxs.auth.core.token;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
+
+import javax.crypto.SecretKey;
 
 import com.dxs.auth.core.entity.RoleEnum;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
-public class KeyPairJwtToken implements ITokenManager {
-    private final PublicKey publicKey;
-    private final PrivateKey privateKey;
+public class SecretJwtToken implements ITokenManager {
 
-    public KeyPairJwtToken(PublicKey publicKey, PrivateKey privateKey) {
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
+    private final String jwtSecret;
+
+    public SecretJwtToken(String jwtSecret) {
+        this.jwtSecret = jwtSecret;
     }
 
     @Override
@@ -30,18 +31,23 @@ public class KeyPairJwtToken implements ITokenManager {
                 .claim("role", role.toString())
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusSeconds(expiration)))
-                .signWith(this.privateKey)
+                .signWith(this.getSigningKey())
                 .compact();
     }
 
     @Override
     public boolean isTokenValid(String token) {
         try {
-            Claims claims = Jwts.parser().verifyWith(this.publicKey).build().parseSignedClaims(token).getPayload();
+            Claims claims = Jwts.parser().verifyWith(this.getSigningKey()).build().parseSignedClaims(token).getPayload();
             return !claims.getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException e) {
             return false;
         }
+    }
+
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(this.jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }
