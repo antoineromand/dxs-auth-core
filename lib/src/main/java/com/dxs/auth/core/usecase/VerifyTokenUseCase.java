@@ -1,11 +1,11 @@
 package com.dxs.auth.core.usecase;
 
-import com.dxs.auth.core.external.TokenManager;
+import com.dxs.auth.core.token.ITokenManager;
 
 public class VerifyTokenUseCase {
-    private TokenManager tokenManager;
+    private final ITokenManager tokenManager;
 
-    public VerifyTokenUseCase(TokenManager tokenManager) {
+    public VerifyTokenUseCase(ITokenManager tokenManager) {
         this.tokenManager = tokenManager;
     }
 

@@ -1,26 +1,29 @@
 package com.dxs.auth.core.usecase;
 
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.dxs.auth.core.entity.AbstractUser;
 import com.dxs.auth.core.entity.RoleEnum;
 import com.dxs.auth.core.exceptions.AuthenticationFailedException;
 import com.dxs.auth.core.external.IPasswordEncrypt;
-import com.dxs.auth.core.external.TokenManager;
 import com.dxs.auth.core.external.repository.AbstractUserRepository;
 import com.dxs.auth.core.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.dxs.auth.core.token.ITokenManager;
 
 class LoginUseCaseTest {
 
     private AbstractUserRepository<MockUser> userRepository;
     private IPasswordEncrypt passwordEncrypt;
-    private TokenManager tokenManager;
+    private ITokenManager tokenManager;
 
     private LoginUseCase<MockUser> loginUseCase;
 
@@ -28,7 +31,7 @@ class LoginUseCaseTest {
     void setUp() {
         userRepository = mock(AbstractUserRepository.class);
         passwordEncrypt = mock(IPasswordEncrypt.class);
-        tokenManager = mock(TokenManager.class);
+        tokenManager = mock(ITokenManager.class);
         loginUseCase = new LoginUseCase<>(userRepository, passwordEncrypt, tokenManager);
     }
 

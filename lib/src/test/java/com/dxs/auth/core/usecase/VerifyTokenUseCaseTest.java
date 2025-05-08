@@ -1,20 +1,23 @@
 package com.dxs.auth.core.usecase;
 
-import com.dxs.auth.core.external.TokenManager;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import com.dxs.auth.core.token.ITokenManager;
 
 class VerifyTokenUseCaseTest {
 
-    private TokenManager tokenManager;
+    private ITokenManager tokenManager;
     private VerifyTokenUseCase verifyTokenUseCase;
 
     @BeforeEach
     void setUp() {
-        tokenManager = mock(TokenManager.class);
+        tokenManager = mock(ITokenManager.class);
         verifyTokenUseCase = new VerifyTokenUseCase(tokenManager);
     }
 
