@@ -1,4 +1,4 @@
-package com.dxs.auth.core.token;
+package com.dxs.auth.core.token ;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -12,11 +12,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 
-public class KeyPairJwtToken implements ITokenManager {
+public class KeyPairJwtTokenManager implements ITokenManager {
     private final PublicKey publicKey;
     private final PrivateKey privateKey;
 
-    public KeyPairJwtToken(PublicKey publicKey, PrivateKey privateKey) {
+    public KeyPairJwtTokenManager(PublicKey publicKey, PrivateKey privateKey) {
         this.publicKey = publicKey;
         this.privateKey = privateKey;
     }
@@ -36,10 +36,13 @@ public class KeyPairJwtToken implements ITokenManager {
 
     @Override
     public boolean isTokenValid(String token) {
+        if (token == null || token.isBlank()) {
+            return false;
+        }
         try {
             Claims claims = Jwts.parser().verifyWith(this.publicKey).build().parseSignedClaims(token).getPayload();
             return !claims.getExpiration().before(new Date());
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException e) {
             return false;
         }
     }

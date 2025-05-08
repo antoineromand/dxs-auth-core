@@ -7,15 +7,16 @@ import java.security.PublicKey;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.dxs.auth.core.entity.RoleEnum;
 
-class KeyPairJwtTokenTest {
+class KeyPairJwtTokenManagerTest {
 
-    private KeyPairJwtToken keyPairJwtToken;
+    private KeyPairJwtTokenManager keyPairJwtTokenManager;
 
     private PrivateKey privateKey;
     private PublicKey publicKey;
@@ -29,15 +30,19 @@ class KeyPairJwtTokenTest {
         privateKey = pair.getPrivate();
         publicKey = pair.getPublic();
 
-        keyPairJwtToken = new KeyPairJwtToken(publicKey, privateKey);
+        keyPairJwtTokenManager = new KeyPairJwtTokenManager(publicKey, privateKey);
     }
 
     @Test
-    void shouldValidateValidToken() {
+    void shouldGenerateAndValidateValidToken() {
         UUID userId = UUID.randomUUID();
-        String token = keyPairJwtToken.generateToken(userId, RoleEnum.ADMIN, 3600); // 1h
+        String token = keyPairJwtTokenManager.generateToken(userId, RoleEnum.ADMIN, 3600);
 
-        boolean isValid = keyPairJwtToken.isTokenValid(token);
+        assertNotNull(token);
+        assertTrue(token.length() > 10);
+        assertFalse(token.isEmpty());
+
+        boolean isValid = keyPairJwtTokenManager.isTokenValid(token);
         assertTrue(isValid, "Expected token to be valid");
     }
 
@@ -47,7 +52,9 @@ class KeyPairJwtTokenTest {
                 "eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNTE2MjM5MDIyfQ." +
                 "INVALIDSIGNATURE";
 
-        boolean isValid = keyPairJwtToken.isTokenValid(fakeToken);
+        boolean isValid = keyPairJwtTokenManager.isTokenValid(fakeToken);
         assertFalse(isValid, "Expected token to be invalid");
+
+        assertFalse(this.keyPairJwtTokenManager.isTokenValid(null));
     }
 }

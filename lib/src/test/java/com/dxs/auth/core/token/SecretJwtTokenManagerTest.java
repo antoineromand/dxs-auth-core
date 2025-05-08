@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Test;
 
 import com.dxs.auth.core.entity.RoleEnum;
 
-public class SecretJwtTokenTest {
+public class SecretJwtTokenManagerTest {
 
-    private SecretJwtToken secretJwtToken;
+    private SecretJwtTokenManager secretJwtTokenManager;
     private String secretKey;
     
     @BeforeEach
     public void setUp() {
         this.secretKey = "7PHnU2qhB8vph36+YErzG9MBZLZVW4A6NP7qH3sNdVI=";
-        this.secretJwtToken = new SecretJwtToken(this.secretKey);
+        this.secretJwtTokenManager = new SecretJwtTokenManager(this.secretKey);
     }
 
     @Test
@@ -28,7 +28,7 @@ public class SecretJwtTokenTest {
         RoleEnum role = RoleEnum.REGULAR;
         long expiration = 900;
 
-        String result = this.secretJwtToken.generateToken(id, role, expiration);
+        String result = this.secretJwtTokenManager.generateToken(id, role, expiration);
 
         assertNotNull(result);
         assertFalse(result.isEmpty());
@@ -41,7 +41,7 @@ public class SecretJwtTokenTest {
         RoleEnum role = null;
         long expiration = 900;
         
-        assertThrows(NullPointerException.class, () -> this.secretJwtToken.generateToken(id, role, expiration));
+        assertThrows(NullPointerException.class, () -> this.secretJwtTokenManager.generateToken(id, role, expiration));
 
     }
 
@@ -51,9 +51,9 @@ public class SecretJwtTokenTest {
         RoleEnum role = RoleEnum.REGULAR;
         long expiration = 900;
 
-        String result = this.secretJwtToken.generateToken(id, role, expiration);
+        String result = this.secretJwtTokenManager.generateToken(id, role, expiration);
 
-        assertTrue(this.secretJwtToken.isTokenValid(result));
+        assertTrue(this.secretJwtTokenManager.isTokenValid(result));
     }
 
     @Test
@@ -62,10 +62,10 @@ public class SecretJwtTokenTest {
         String nullToken = null;
         String invalidToken = "invalidtoken.jwtfzfzef.fzefzefezfezf";
 
-        assertThrows(IllegalArgumentException.class, () -> this.secretJwtToken.isTokenValid(emptyToken));
-        assertThrows(IllegalArgumentException.class, () -> this.secretJwtToken.isTokenValid(nullToken));
+        assertThrows(IllegalArgumentException.class, () -> this.secretJwtTokenManager.isTokenValid(emptyToken));
+        assertThrows(IllegalArgumentException.class, () -> this.secretJwtTokenManager.isTokenValid(nullToken));
 
-        assertFalse(this.secretJwtToken.isTokenValid(invalidToken));
+        assertFalse(this.secretJwtTokenManager.isTokenValid(invalidToken));
 
     }
 }

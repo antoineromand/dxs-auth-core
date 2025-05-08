@@ -14,11 +14,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-public class SecretJwtToken implements ITokenManager {
+public class SecretJwtTokenManager implements ITokenManager {
 
     private final String jwtSecret;
 
-    public SecretJwtToken(String jwtSecret) {
+    public SecretJwtTokenManager(String jwtSecret) {
         this.jwtSecret = jwtSecret;
     }
 
