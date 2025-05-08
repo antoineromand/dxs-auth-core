@@ -11,6 +11,7 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
     `maven-publish`
+    `jacoco`
 }
 
 repositories {
@@ -62,7 +63,13 @@ publishing {
 tasks.named<Test>("test") {
     // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
 }
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+}
+
 
 tasks.register("bumpVersion") {
     description = "Incrémente la version (usage: ./gradlew bumpVersion -Ptype=major|minor|patch)"
