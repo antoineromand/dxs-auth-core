@@ -33,3 +33,4 @@ jobs:
           java-version: 23
           target-folder: javadoc
           project: gradle
+          javadoc-source-folder: lib/build/docs/javadoc
