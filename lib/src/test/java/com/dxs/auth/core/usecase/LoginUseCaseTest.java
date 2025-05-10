@@ -15,8 +15,8 @@ import com.dxs.auth.core.entity.AbstractUser;
 import com.dxs.auth.core.entity.RoleEnum;
 import com.dxs.auth.core.exceptions.AuthenticationFailedException;
 import com.dxs.auth.core.external.IPasswordEncrypt;
-import com.dxs.auth.core.external.repository.AbstractUserRepository;
-import com.dxs.auth.core.response.Response;
+import com.dxs.auth.core.output.Response;
+import com.dxs.auth.core.repository.AbstractUserRepository;
 import com.dxs.auth.core.token.ITokenManager;
 
 class LoginUseCaseTest {

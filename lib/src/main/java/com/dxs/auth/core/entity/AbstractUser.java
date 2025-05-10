@@ -7,4 +7,5 @@ public abstract class AbstractUser {
     public abstract String getEmail();
     public abstract String getPassword();
     public abstract RoleEnum getRole();
+    public abstract boolean is2FAActive();
 }

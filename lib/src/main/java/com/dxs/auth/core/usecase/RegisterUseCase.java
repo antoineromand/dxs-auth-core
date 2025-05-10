@@ -3,16 +3,16 @@ package com.dxs.auth.core.usecase;
 import com.dxs.auth.core.entity.AbstractUser;
 import com.dxs.auth.core.entity.IUserFactory;
 import com.dxs.auth.core.exceptions.EmailAlreadyExistsException;
-import com.dxs.auth.core.external.IPasswordEncrypt;
-import com.dxs.auth.core.external.repository.AbstractUserRepository;
-import com.dxs.auth.core.response.RegisterInput;
-import com.dxs.auth.core.response.Response;
+import com.dxs.auth.core.input.RegisterInput;
+import com.dxs.auth.core.output.Response;
+import com.dxs.auth.core.repository.AbstractUserRepository;
+import com.dxs.auth.core.service.IPasswordEncryptService;
 
 public class RegisterUseCase <T extends AbstractUser, I extends RegisterInput> {
     private final AbstractUserRepository<T> userRepository;
-    private final IPasswordEncrypt passwordEncrypt;
+    private final IPasswordEncryptService passwordEncrypt;
     private final IUserFactory<T, I> userFactory;
-    public RegisterUseCase(AbstractUserRepository<T> userRepository, IPasswordEncrypt passwordEncrypt, IUserFactory<T, I> userFactory) {
+    public RegisterUseCase(AbstractUserRepository<T> userRepository, IPasswordEncryptService passwordEncrypt, IUserFactory<T, I> userFactory) {
         this.userRepository = userRepository;
         this.passwordEncrypt = passwordEncrypt;
         this.userFactory = userFactory;

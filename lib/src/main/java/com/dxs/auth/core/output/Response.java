@@ -1,4 +1,4 @@
-package com.dxs.auth.core.response;
+package com.dxs.auth.core.output;
 
 public class Response<T> {
     private boolean success;

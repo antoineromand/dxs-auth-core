@@ -1,4 +1,4 @@
-package com.dxs.auth.core.response;
+package com.dxs.auth.core.input;
 
 public interface RegisterInput {
     String getEmail();
